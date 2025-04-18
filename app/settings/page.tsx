@@ -21,13 +21,13 @@ import type React from "react"; // Import React type if needed for JSX
 export default async function SettingsPage() {
   // Fetch session on the server during the initial render
   const session = await getSession();
-  const initialUser = session?.user || null; // Get initial user data from session
+  const initialUser: { id: string; email: string; role: string; name?: string; phone?: string } | null = session?.user || null; // Get initial user data from session
 
   // Now, add "use client" below the async function if you need client-side features
   // like useState, useEffect, form handling, etc.
   // If the entire component is just displaying data fetched on the server,
   // you might not need "use client". But for form interactions, you will.
-  ("use client");
+
 
   // Remove the useUser hook call:
   // const { user, setUser, logout } = useUser();
@@ -219,11 +219,12 @@ export default async function SettingsPage() {
               {/* SMS Alerts */}
               <label className="flex items-center">
                 <input
-                  type="checkbox"
-                  name="smsAlerts"
-                  checked={formData.smsAlerts}
-                  onChange={handleChange}
-                  className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    type="checkbox"
+                    name="smsAlerts"
+                    checked={formData.smsAlerts}
+                    onChange={handleChange}
+                    className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    title="Receive SMS alerts"
                 />
                 <span className="ml-2">Receive SMS alerts</span>
               </label>
