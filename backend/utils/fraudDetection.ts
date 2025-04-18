@@ -1,4 +1,5 @@
 import db from "../config/database"
+import { QueryTypes } from "sequelize"
 
 interface RiskFactors {
   amount: number
@@ -44,11 +45,13 @@ export async function calculateRiskScore(transaction: Transaction, user: User): 
   // 2. Frequency factor - check for multiple transactions in short time
   const recentTransactionsResult = await db.query(
     `SELECT COUNT(*) FROM transactions 
-     WHERE user_id = $1 AND created_at > NOW() - INTERVAL '24 hours'`,
-    [user.id],
+     WHERE user_id = :userId AND created_at > NOW() - INTERVAL '24 hours'`,
+    {
+      type: QueryTypes.SELECT,
+    },
   )
 
-  const recentTransactionsCount = Number.parseInt(recentTransactionsResult.rows[0].count)
+  const recentTransactionsCount = Number.parseInt((recentTransactionsResult[0] as any).count)
 
   if (recentTransactionsCount > 10) {
     riskFactors.frequency = 25
@@ -83,9 +86,18 @@ export async function calculateRiskScore(transaction: Transaction, user: User): 
 
 // Helper function to calculate user's average transaction amount
 async function calculateUserAverageAmount(userId: string): Promise<number> {
-  const result = await db.query("SELECT AVG(amount) as avg_amount FROM transactions WHERE user_id = $1", [userId])
+  const result = await db.query("SELECT AVG(amount) as avg_amount FROM transactions WHERE user_id = $1", {
+    replacements: [userId],
+    type: QueryTypes.SELECT,
+  })
 
-  return Number.parseFloat(result.rows[0].avg_amount) || 0
+  const avgAmount = (result[0] as any)?.avg_amount;
+
+  if (avgAmount === undefined || avgAmount === null) {
+    return 0;
+  }
+
+  return Number(avgAmount);
 }
 
 // Determine if a transaction should be flagged based on risk score

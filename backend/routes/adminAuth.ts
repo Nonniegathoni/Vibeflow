@@ -35,6 +35,7 @@ export const adminLogin = async (req: Request, res: Response, next: NextFunction
     }
 
     // Explicit Type Assertion: Tell TS that results[0] is a single object
+    //@ts-ignore
     const adminUser = results[0] as AdminUserQueryResult;
 
     // Now perform checks on the typed 'adminUser' object

@@ -1,6 +1,7 @@
 import * as path from "path"
 import * as dotenv from "dotenv"
 import db from "../config/database"
+import { QueryTypes } from "sequelize"
 import * as bcrypt from "bcrypt"
 
 // Load environment variables
@@ -127,17 +128,31 @@ async function setupDatabase() {
     console.log("✅ Notifications table created")
 
     // Check if admin user exists
-    const adminExists = await db.query("SELECT * FROM users WHERE email = $1", ["admin@vibeflow.com"])
+    const [adminRows] = await db.query("SELECT * FROM users WHERE email = :email", {
+      type: QueryTypes.SELECT,
+      //@ts-ignore
+      type: db.QueryTypes.SELECT,
+    })
 
-    if (adminExists.rows.length === 0) {
+    if ((adminRows ?? []).length === 0) {
       // Create admin user
       const salt = await bcrypt.genSalt(10)
       const hashedPassword = await bcrypt.hash("Admin123!", salt)
 
       await db.query(
         `INSERT INTO users (name, email, password, role, balance, account_number, phone_number)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        ["Admin User", "admin@vibeflow.com", hashedPassword, "admin", 1000000, "9999999999", "+254712345678"],
+         VALUES (:name, :email, :password, :role, :balance, :account_number, :phone_number)`,
+        {
+          replacements: {
+            name: "Admin User",
+            email: "admin@vibeflow.com",
+            password: hashedPassword,
+            role: "admin",
+            balance: 1000000,
+            account_number: "9999999999",
+            phone_number: "+254712345678",
+          },
+        }
       )
       console.log("✅ Admin user created")
     } else {
@@ -149,7 +164,7 @@ async function setupDatabase() {
     console.error("❌ Database setup error:", error)
   } finally {
     // Close the pool
-    db.pool.end()
+    await db.close()
   }
 }
 
