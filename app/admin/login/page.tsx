@@ -69,10 +69,53 @@ export default function AdminLoginPage() {
     }
   }
 
+  // const handleSubmitVerification = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   setIsLoading(true)
+  //   setError("")
+
+  //   try {
+  //     const response = await fetch("/api/auth/admin/verify", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         email: formData.email,
+  //         code: verificationCode,
+  //       }),
+  //     })
+
+  //     const data = await response.json()
+
+  //     if (!response.ok) {
+  //       throw new Error(data.message || "Verification failed")
+  //     }
+
+  //     // Store the auth token and user data
+  //     if (typeof window !== "undefined") {
+  //       // Set localStorage
+  //       localStorage.setItem("vibeflow-token", data.token)
+  //       localStorage.setItem("vibeflow-user", JSON.stringify(data.user))
+        
+  //       // Set cookie with proper options
+  //       document.cookie = `token=${data.token}; path=/; max-age=14400; SameSite=Strict; Secure`
+  //     }
+
+  //     // Force a hard redirect to ensure the new auth state is recognized
+  //     window.location.href = "/admin"
+  //   } catch (error) {
+  //     console.error("Verification error:", error)
+  //     setError(error instanceof Error ? error.message : "Failed to verify code")
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
+
   const handleSubmitVerification = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
     try {
       const response = await fetch("/api/auth/admin/verify", {
@@ -84,33 +127,32 @@ export default function AdminLoginPage() {
           email: formData.email,
           code: verificationCode,
         }),
-      })
+        credentials: "include", // Important! Includes the HttpOnly cookie
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Verification failed")
+        throw new Error(data.message || "Verification failed");
       }
 
-      // Store the auth token and user data
+      // Store user data in localStorage if needed (but not the token)
       if (typeof window !== "undefined") {
-        // Set localStorage
-        localStorage.setItem("vibeflow-token", data.token)
-        localStorage.setItem("vibeflow-user", JSON.stringify(data.user))
-        
-        // Set cookie with proper options
-        document.cookie = `token=${data.token}; path=/; max-age=14400; SameSite=Strict; Secure`
+        localStorage.setItem("vibeflow-user", JSON.stringify(data.user));
       }
 
-      // Force a hard redirect to ensure the new auth state is recognized
-      window.location.href = "/admin"
+      // Hard redirect to refresh auth context (optional)
+      window.location.href = "/admin";
     } catch (error) {
-      console.error("Verification error:", error)
-      setError(error instanceof Error ? error.message : "Failed to verify code")
+      console.error("Verification error:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to verify code"
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
+
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
