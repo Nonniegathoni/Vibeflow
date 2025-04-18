@@ -1,3 +1,4 @@
+"use client";
 // app/settings/page.tsx
 
 // This page can be a Server Component initially,
