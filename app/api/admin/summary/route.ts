@@ -27,12 +27,19 @@ export async function GET() {
     const recentUsersResult = await query(
       "SELECT id, name, email, created_at FROM users ORDER BY created_at DESC LIMIT 5"
     )
-    const recentUsers = recentUsersResult.rows.map(user => ({
+    interface RecentUser {
+      id: string;
+      name: string;
+      email: string;
+      date: string;
+    }
+
+    const recentUsers: RecentUser[] = recentUsersResult.rows.map((user: { id: string; name: string; email: string; created_at: string }) => ({
       id: user.id,
       name: user.name,
       email: user.email,
       date: new Date(user.created_at).toISOString().split('T')[0]
-    }))
+    }));
 
     return NextResponse.json({
       totalUsers,

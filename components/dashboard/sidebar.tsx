@@ -14,7 +14,7 @@ export function Sidebar() {
     { name: "Fraud Alerts", href: "/dashboard/alerts", icon: AlertTriangle },
     { name: "Security", href: "/dashboard/security", icon: Shield },
     { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
-    // { name: "Settings", href: "/dashboard/settings", icon: Settings },
+    { name: "Settings", href: "/dashboard/alerts", icon: Settings },
     { name: "Help & Support", href: "/dashboard/support", icon: HelpCircle },
   ]
 

@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    await requireAdmin(request)
+    await requireAdmin()
 
     const result = await query(
       `SELECT t.*, 

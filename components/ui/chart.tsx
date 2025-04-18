@@ -13,12 +13,14 @@ export interface ChartData {
 }
 
 interface ChartProps {
-  data: ChartData[]
-  dataKey: string
-  nameKey: string
-  onFilter?: (value: string) => void
-  height?: number
-  width?: number
+  readonly data: ChartData[]
+  readonly dataKey: keyof ChartData
+  readonly nameKey: keyof ChartData
+  readonly color?: string
+  readonly colors?: string[] // Added colors property
+  readonly onFilter?: (value: string) => void
+  readonly height?: number
+  readonly width?: number
 }
 
 export function BarChart({ data, dataKey, nameKey, color = "#8884d8", onFilter }: ChartProps) {
@@ -30,10 +32,17 @@ export function BarChart({ data, dataKey, nameKey, color = "#8884d8", onFilter }
             <div 
               className="h-4 rounded" 
               style={{ 
-                width: `${(item[dataKey] / Math.max(...data.map(d => d[dataKey]))) * 100}%`,
+                width: `${(Number(item[dataKey]) / Math.max(...data.map(d => Number(d[dataKey])))) * 100}%`,
                 backgroundColor: color
               }}
-              onClick={() => onFilter?.(item[nameKey])}
+              onClick={() => onFilter?.(String(item[nameKey]))}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  onFilter?.(String(item[nameKey]))
+                }
+              }}
             />
             <span className="text-sm">{item[nameKey]}</span>
             <span className="text-sm font-medium">{item[dataKey]}</span>
@@ -45,7 +54,7 @@ export function BarChart({ data, dataKey, nameKey, color = "#8884d8", onFilter }
 }
 
 export function PieChart({ data, dataKey, nameKey, colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"], onFilter }: ChartProps) {
-  const total = data.reduce((sum, item) => sum + item[dataKey], 0)
+  const total = data.reduce((sum, item) => sum + (typeof item[dataKey] === "number" ? item[dataKey] : 0), 0)
   
   return (
     <div className="w-full h-full">
@@ -55,10 +64,17 @@ export function PieChart({ data, dataKey, nameKey, colors = ["#0088FE", "#00C49F
             <div 
               className="h-4 rounded" 
               style={{ 
-                width: `${(item[dataKey] / total) * 100}%`,
+                width: `${((typeof item[dataKey] === "number" ? item[dataKey] : 0) / total) * 100}%`,
                 backgroundColor: colors[index % colors.length]
               }}
-              onClick={() => onFilter?.(item[nameKey])}
+              onClick={() => onFilter?.(String(item[nameKey]))}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  onFilter?.(String(item[nameKey]))
+                }
+              }}
             />
             <span className="text-sm">{item[nameKey]}</span>
             <span className="text-sm font-medium">{item[dataKey]}</span>
@@ -77,11 +93,19 @@ export function AreaChart({ data, dataKey, nameKey, color = "#82ca9d", onFilter 
           <div key={index} className="flex items-center space-x-2">
             <div 
               className="h-4 rounded" 
-              style={{ 
+              style={{ //@ts-ignore
                 width: `${(item[dataKey] / Math.max(...data.map(d => d[dataKey]))) * 100}%`,
                 backgroundColor: color
               }}
-              onClick={() => onFilter?.(item[nameKey])}
+
+              onClick={() => onFilter?.(String(item[nameKey] ?? ""))}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  onFilter?.(String(item[nameKey] ?? ""))
+                }
+              }}
             />
             <span className="text-sm">{item[nameKey]}</span>
             <span className="text-sm font-medium">{item[dataKey]}</span>
