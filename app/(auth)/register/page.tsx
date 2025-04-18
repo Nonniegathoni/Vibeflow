@@ -83,7 +83,7 @@ export default function RegisterPage() {
             Back to Home
           </Link>
           <CardTitle className="text-2xl font-bold text-indigo-700">Create an Account</CardTitle>
-          <p className="text-gray-500 mt-2">Sign up to get started with Vibeflow Banking</p>
+          <p className="text-gray-500 mt-2">Sign up to get started with Viz Banking</p>
         </CardHeader>
         <CardContent>
           {error && (

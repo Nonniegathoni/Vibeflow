@@ -47,7 +47,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-8 pt-4 border-t text-center text-sm text-gray-500">
-            <p>© 2024 Vibeflow Banking System. All rights reserved.</p>
+            <p>© 2025 Viz Banking System. All rights reserved.</p>
           </div>
         </CardContent>
       </Card>

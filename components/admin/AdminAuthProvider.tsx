@@ -121,7 +121,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
       toast({
         title: "Login successful",
-        description: "Welcome to Vibeflow Banking Admin Panel",
+        description: "Welcome to Viz Banking Admin Panel",
         duration: 3000,
       })
 
