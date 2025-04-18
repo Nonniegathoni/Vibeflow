@@ -20,7 +20,7 @@ export function AdminSidebar() {
   return (
     <aside className="w-64 bg-gray-900 text-white hidden md:block">
       <div className="p-6">
-        <h2 className="text-2xl font-bold">Vibeflow</h2>
+        <h2 className="text-2xl font-bold">Viz</h2>
         <p className="text-gray-400 text-sm">Admin Panel</p>
       </div>
       

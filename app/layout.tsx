@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Vibeflow Banking System",
+  title: "Viz Banking System",
   description: "Secure banking system with fraud detection",
 }
 

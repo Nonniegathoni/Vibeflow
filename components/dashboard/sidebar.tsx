@@ -21,7 +21,7 @@ export function Sidebar() {
   return (
     <aside className="w-64 bg-indigo-800 text-white flex flex-col h-screen">
       <div className="p-6">
-        <h2 className="text-2xl font-bold">Vibeflow</h2>
+        <h2 className="text-2xl font-bold">Viz</h2>
         <p className="text-indigo-200 text-sm">Banking System</p>
       </div>
 

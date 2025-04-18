@@ -6,7 +6,7 @@ const Navigation: React.FC = () => {
     <nav className="bg-blue-600 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold">
-          Vibeflow
+          Viz
         </Link>
         <div className="space-x-4">
           <Link href="/dashboard" className="hover:text-blue-200">
