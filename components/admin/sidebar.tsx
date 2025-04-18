@@ -14,7 +14,7 @@ export function AdminSidebar() {
     { name: 'Fraud Alerts', href: '/admin/alerts', icon: AlertTriangle },
     { name: 'Reports', href: '/admin/reports', icon: FileText },
     { name: 'Support Tickets', href: '/admin/tickets', icon: MessageSquare },
-    { name: 'System Config', href: '/admin/config', icon: Settings },
+    // { name: 'System Config', href: '/admin/config', icon: Settings },
   ];
   
   return (
