@@ -43,20 +43,23 @@ export default function RegisterPage() {
     setError("")
 
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch("/api/admin/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          name: formData.firstName + " " + formData.lastName,
           first_name: formData.firstName,
           last_name: formData.lastName,
           email: formData.email,
           password: formData.password,
-          phone: formData.phone,
+          phone_number: formData.phone,
           role: "user", // Default role for new registrations
+          account_number: Math.floor(Math.random() * 1000000000).toString(), // Random account number
+          balance: 0.0, // Default balance
         }),
-      })
+      });
 
       const data = await response.json()
 
@@ -83,7 +86,7 @@ export default function RegisterPage() {
             Back to Home
           </Link>
           <CardTitle className="text-2xl font-bold text-indigo-700">Create an Account</CardTitle>
-          <p className="text-gray-500 mt-2">Sign up to get started with Viz Banking</p>
+          <p className="text-gray-500 mt-2">Sign up to get started with Vibeflow Banking</p>
         </CardHeader>
         <CardContent>
           {error && (

@@ -53,16 +53,28 @@ export async function PUT(
     }
 
     // 🔍 Add audit log
-    await insertAuditLog({
-      //@ts-ignore
-      userId: admin.user.id,
-      action: "update",
-      entityId: parseInt(params.id),
-      details: `Updated fraud alert to status "${status}" with resolution: "${
-        resolution || "N/A"
-      }"`,
-      ipAddress: ipAddress || undefined,
-    });
+    // await insertAuditLog({
+    //   //@ts-ignore
+    //   userId: admin.user.id,
+    //   action: "update",
+    //   entityId: parseInt(params.id),
+    //   details: `Updated fraud alert to status "${status}" with resolution: "${
+    //     resolution || "N/A"
+    //   }"`,
+    //   ipAddress: ipAddress || undefined,
+    // });
+      await insertAuditLog({
+        request, // <-- pass the full Request object here
+        // @ts-ignore
+        userId: admin.user.id,
+        action: "update",
+        //@ts-ignore
+        entityId: admin.user.id,
+        details: `Updated fraud alert to status "${status}" with resolution: "${
+          resolution || "N/A"
+        }"`,
+      });
+
 
     return NextResponse.json(result.rows[0]);
   } catch (error) {

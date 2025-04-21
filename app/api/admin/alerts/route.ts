@@ -101,14 +101,24 @@ export async function PUT(request: Request) {
     }
 
     // Insert audit log
+    // await insertAuditLog({
+    //   //@ts-ignore fix this later
+    //   userId: admin.user.id,
+    //   action: "update",
+    //   entityId: id,
+    //   details: `Updated fraud alert status to "${status}"`,
+    //   ipAddress: ipAddress || undefined,
+    // });
     await insertAuditLog({
-      //@ts-ignore fix this later
+      request, // <-- pass the full Request object here
+      // @ts-ignore
       userId: admin.user.id,
       action: "update",
-      entityId: id,
+      //@ts-ignore
+      entityId: admin.user.id,
       details: `Updated fraud alert status to "${status}"`,
-      ipAddress: ipAddress || undefined,
     });
+
 
     return NextResponse.json(result.rows[0]);
   } catch (error) {

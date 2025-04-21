@@ -7,7 +7,7 @@ import { signOut } from '@/lib/auth';
 export function Header({ user }: { user: any }) {
   return (
     <header className="bg-white border-b border-gray-200 py-1 px-6 flex items-center justify-between">
-      <h1 className="text-xl font-bold text-indigo-700">Viz Banking System</h1>
+      <h1 className="text-xl font-bold text-indigo-700">Vibeflow Banking System</h1>
       
       <div className="flex items-center space-x-4">
         <Link href="/dashboard/notifications" className="p-2 rounded-full hover:bg-gray-100 relative">

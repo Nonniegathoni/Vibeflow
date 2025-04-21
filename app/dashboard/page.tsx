@@ -179,7 +179,7 @@ export default function Dashboard() {
                   size="sm"
                   variant="outline"
                   onClick={() =>
-                    router.push("/dashboard/transactions/new?type=withdraw")
+                    router.push("/dashboard/transactions/new?type=withdrawal")
                   }
                 >
                   Withdraw

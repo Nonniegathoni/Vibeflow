@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { getSession } from "@/lib/auth"
 import { formatCurrency } from "@/lib/utils"
-
+import { useSearchParams } from 'next/navigation';
 interface Recipient {
   id: number
   name: string
@@ -22,6 +22,9 @@ export default function NewTransactionPage() {
   const [recipients, setRecipients] = useState<Recipient[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const searchParams = useSearchParams();
+  const initialType = searchParams.get("type") || "";
+
   const [formData, setFormData] = useState({
     recipient_id: "",
     custom_recipient: "",
@@ -40,6 +43,10 @@ export default function NewTransactionPage() {
     }
     checkAuth()
   }, [router])
+
+    useEffect(() => {
+    setFormData((prev) => ({ ...prev, type: initialType }));
+  }, [initialType]);
 
   useEffect(() => {
     const fetchRecipients = async () => {

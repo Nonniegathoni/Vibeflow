@@ -12,8 +12,8 @@ export function Sidebar() {
     { name: "Dashboard", href: "/dashboard", icon: Home },
     { name: "Transactions", href: "/dashboard/transactions", icon: CreditCard },
     { name: "Fraud Alerts", href: "/dashboard/alerts", icon: AlertTriangle },
-    { name: "Security", href: "/dashboard/security", icon: Shield },
-    { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
+    // { name: "Security", href: "/dashboard/security", icon: Shield },
+    // { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
     { name: "Settings", href: "/dashboard/alerts", icon: Settings },
     { name: "Help & Support", href: "/dashboard/support", icon: HelpCircle },
   ]
@@ -21,8 +21,8 @@ export function Sidebar() {
   return (
     <aside className="w-64 bg-indigo-800 text-white flex flex-col h-screen">
       <div className="p-6">
-        <h2 className="text-2xl font-bold">Viz</h2>
-        <p className="text-indigo-200 text-sm">Banking System</p>
+        <h2 className="text-2xl font-bold">Vibeflow</h2>
+        <p className="text-indigo-200 text-sm">Banking with Fraud Detection</p>
       </div>
 
       <nav className="mt-6 flex-1 overflow-y-auto">
