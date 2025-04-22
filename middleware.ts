@@ -6,7 +6,16 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value
 
   // Public paths that don't require authentication
-  const publicPaths = ["/", "/login", "/register", "/admin/login", "/forgot-password"]
+  //const publicPaths = ["/", "/login", "/register", "/admin/login", "/forgot-password"]
+  const publicPaths = [
+    "/",
+    "/login",
+    "/register",
+    "/admin/login",
+    "/forgot-password",
+    "/api/admin/users", // <-- add this
+  ];
+
   const isPublicPath = publicPaths.some(
     (path) => request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith("/api/auth/"),
   )

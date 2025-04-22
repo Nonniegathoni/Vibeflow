@@ -240,10 +240,9 @@ const result = await query(
         await insertAuditLog({
           request, // <-- pass the full Request object here
           // @ts-ignore
-          userId: admin.user.id,
+          userId: null, // or leave out if optional
           action: "create",
-          //@ts-ignore
-          entityId: admin.user.id,
+          entityId: newUser.id,
           details: `Created user: ${name} (${email}), role: ${role}, account: ${account_number}, phone: ${phone_number}`,
         });
 

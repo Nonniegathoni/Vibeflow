@@ -26,12 +26,13 @@ export async function getServerSession() {
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key")
     const { payload } = await jwtVerify(token, secret)
-
+console.log("Payload:", payload)
     return {
       user: {
         id: payload.id as string,
         email: payload.email as string,
         role: payload.role as string,
+        name: payload.name as string,
       },
     }
   } catch (error) {

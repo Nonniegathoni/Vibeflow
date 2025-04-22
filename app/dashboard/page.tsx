@@ -66,13 +66,18 @@ export default function Dashboard() {
   // Function to fetch user data
   const fetchUserData = async () => {
     try {
-      const response = await fetch("/api/auth/me")
+      // const response = await fetch("/api/auth/me")
+       const response = await fetch("/api/auth/me", {
+         credentials: "include", // <-- this is the key!
+       });
+
 
       if (!response.ok) {
         throw new Error("Failed to fetch user data")
       }
 
       const data = await response.json()
+      console.log("The user data is", data)
       setUser(data.user)
     } catch (error) {
       console.error("Error fetching user data:", error)
@@ -126,7 +131,7 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">
-          Welcome, {userDisplayName} 😊
+          Welcome, {user?.name} 😊
           {user?.role === "admin" && (
             <span className="ml-2 text-sm bg-gray-200 px-2 py-1 rounded">
               Admin
