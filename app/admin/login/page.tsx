@@ -49,18 +49,23 @@ export default function AdminLoginPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Login failed")
+        throw new Error(data.message || "Login failed");
+      }
+
+      // Store user data in localStorage if needed (but not the token)
+      if (typeof window !== "undefined") {
+        localStorage.setItem("vibeflow-user", JSON.stringify(data.user));
       }
 
       // If successful, move to verification step
-      setSessionToken(data.sessionToken)
-      setStep("verification")
-      setCountdown(300) // 5 minute countdown for code expiration
+      setSessionToken(data.sessionToken);
+      setStep("verification");
+      setCountdown(300); // 5 minute countdown for code expiration
     } catch (error) {
       console.error("Login error:", error)
       setError(error instanceof Error ? error.message : "Failed to login")
@@ -140,6 +145,7 @@ export default function AdminLoginPage() {
       if (typeof window !== "undefined") {
         localStorage.setItem("vibeflow-user", JSON.stringify(data.user));
       }
+      
 
       // Hard redirect to refresh auth context (optional)
       window.location.href = "/admin";

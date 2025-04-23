@@ -57,15 +57,15 @@ export default function TransactionsPage() {
     dateRange: "all"
   })
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession()
-      if (!session?.user?.id) {
-        router.push("/login")
-      }
-    }
-    checkAuth()
-  }, [router])
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     const session = await getSession()
+  //     if (!session?.user?.id) {
+  //       router.push("/login")
+  //     }
+  //   }
+  //   checkAuth()
+  // }, [router])
 
   useEffect(() => {
     const fetchTransactions = async () => {
