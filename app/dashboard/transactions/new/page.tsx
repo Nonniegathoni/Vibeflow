@@ -34,15 +34,30 @@ export default function NewTransactionPage() {
     location: ""
   })
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession()
-      if (!session?.user?.id) {
-        router.push("/login")
+    const fetchUserData = async () => {
+      try {
+        // const response = await fetch("/api/auth/me")
+        const response = await fetch("/api/auth/me", {
+          credentials: "include", // <-- this is the key!
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const data = await response.json();
+         if (!data) {
+           router.push("/login");
+         }
+        // setUser(data.user);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-    }
-    checkAuth()
-  }, [router])
+  };
+  
+    useEffect(() => {
+      fetchUserData();
+    }, [router]);
 
     useEffect(() => {
     setFormData((prev) => ({ ...prev, type: initialType }));

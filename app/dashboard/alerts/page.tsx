@@ -54,15 +54,15 @@ export default function AdminAlertsPage() {
     const checkAuth = async () => {
       try {
         const session = await getSession();
-        if (!session) {
-          router.push("/login");
-          return;
-        }
+        // if (!session) {
+        //   router.push("/login");
+        //   return;
+        // }
 
-        if (session.user.role !== "admin") {
-          router.push("/dashboard");
-          return;
-        }
+        // if (session?.user.role !== "admin") {
+        //   router.push("/dashboard");
+        //   return;
+        // }
 
         fetchAlerts();
       } catch (error) {

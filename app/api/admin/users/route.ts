@@ -325,6 +325,7 @@ export async function PUT(request: Request) {
     const session = await requireAdmin();
 
     const body = await request.json();
+    console.log("The body check",body)
     const { userId, role } = body;
 
     if (!userId || !role) {

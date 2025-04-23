@@ -33,11 +33,12 @@ export function CreateUserModal({
 }: CreateUserModalProps) {
   const [formData, setFormData] = useState({
     first_name: "",
+    name: "",
     last_name: "",
     email: "",
     password: "",
     role: "user",
-    account_number: "",
+    account_number: Math.floor(Math.random() * 1000000000).toString(), // Random account number
     phone_number: "",
     balance: "0.00",
   });
@@ -73,6 +74,7 @@ export function CreateUserModal({
       setFormData({
         first_name: "",
         last_name: "",
+        name: formData.first_name + " " + formData.last_name,
         email: "",
         password: "",
         role: "user",
