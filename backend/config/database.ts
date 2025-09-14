@@ -18,7 +18,7 @@ if (!dbName || !dbUser || !dbPassword || !dbHost) {
   );
 }
 
-const useSSL = dbHost?.includes("render.com");
+const useSSL = dbHost?.includes("neon.tech");
 
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
@@ -73,4 +73,4 @@ testConnection();
 
 setInterval(testConnection, 300000);
 
-export default sequelize;
+export default sequelize; 

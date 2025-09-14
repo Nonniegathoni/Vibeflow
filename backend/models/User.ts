@@ -19,8 +19,8 @@ class User extends Model {
   public verification_code?: string;
   public verification_code_expires_at?: Date;
   public last_login?: Date;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 
   // Instance method for password comparison
   async comparePassword(candidatePassword: string): Promise<boolean> {
@@ -89,12 +89,24 @@ User.init(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,
     modelName: 'User',
     tableName: 'users',
     timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
     hooks: {
       beforeCreate: async (user: User) => {
         // Hash password before saving

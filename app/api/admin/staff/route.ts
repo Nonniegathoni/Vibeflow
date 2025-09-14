@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
-import { requireAdmin } from "@/lib/auth"
+import { requireApiAdmin } from "@/lib/auth"
 
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    await requireAdmin()
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
 
     const result = await query(`
       SELECT 

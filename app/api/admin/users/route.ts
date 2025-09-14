@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireApiAdmin } from "@/lib/auth";
 import bcrypt from "bcrypt";
 import { insertAuditLog } from "@/lib/audit";
 // GET /api/admin/users
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    await requireAdmin();
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
 
     const result = await query(`
       SELECT 
@@ -139,7 +142,11 @@ export async function POST(request: Request) {
       request.headers.get("x-forwarded-for") ||
       request.headers.get("host") ||
       null;
-    const admin = await requireAdmin();
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+    const admin = authResult;
 
     const body = await request.json();
     const {
@@ -240,7 +247,7 @@ const result = await query(
         await insertAuditLog({
           request, // <-- pass the full Request object here
           // @ts-ignore
-          userId: null, // or leave out if optional
+          userId: admin.user.id,
           action: "create",
           entityId: newUser.id,
           details: `Created user: ${name} (${email}), role: ${role}, account: ${account_number}, phone: ${phone_number}`,
@@ -322,7 +329,11 @@ const result = await query(
 
 export async function PUT(request: Request) {
   try {
-    const session = await requireAdmin();
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+    const session = authResult;
 
     const body = await request.json();
     console.log("The body check",body)
@@ -355,10 +366,10 @@ export async function PUT(request: Request) {
       await insertAuditLog({
         request, // <-- pass the full Request object here
         // @ts-ignore
-        userId: admin.user.id,
+        userId: session.user.id,
         action: "update-role",
         //@ts-ignore
-        entityId: admin.user.id,
+        entityId: userId,
         details: `Changed role to ${role}`,
       });
 
@@ -437,7 +448,11 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    const session = await requireAdmin();
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+    const session = authResult;
 
     const body = await request.json();
     const { userId } = body;
@@ -477,10 +492,10 @@ export async function DELETE(request: Request) {
       await insertAuditLog({
         request, // <-- pass the full Request object here
         // @ts-ignore
-        userId: admin.user.id,
+        userId: session.user.id,
         action: "delete-user",
         //@ts-ignore
-        entityId: admin.user.id,
+        entityId: userId,
         details: `Deleted user ${deletedUser.name} (${deletedUser.email})`,
       });
 

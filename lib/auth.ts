@@ -1,5 +1,6 @@
 import { jwtVerify } from "jose"
 import { redirect } from "next/navigation"
+import { NextResponse } from "next/server"
 
 // Create a type for the session
 interface SessionUser {
@@ -93,6 +94,68 @@ export function signOut() {
     localStorage.removeItem("vibeflow-token")
     window.location.href = "/"
   }
+}
+
+// API route authentication functions
+export async function getApiSession(request: Request) {
+  const token = request.headers.get("authorization")?.replace("Bearer ", "") ||
+                request.headers.get("cookie")?.split(";").find(c => c.trim().startsWith("token="))?.split("=")[1]
+
+  if (!token) {
+    return null
+  }
+
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET || "your-secret-key")
+    const { payload } = await jwtVerify(token, secret)
+    
+    return {
+      user: {
+        id: payload.id as string,
+        email: payload.email as string,
+        role: payload.role as string,
+        name: payload.name as string,
+      },
+    }
+  } catch (error) {
+    console.error("API Session verification error:", error)
+    return null
+  }
+}
+
+// Use this in API routes
+export async function requireApiAuth(request: Request) {
+  const session = await getApiSession(request)
+
+  if (!session) {
+    return NextResponse.json(
+      { error: "Authentication required" },
+      { status: 401 }
+    )
+  }
+
+  return session
+}
+
+// Use this in API routes for admin-only endpoints
+export async function requireApiAdmin(request: Request) {
+  const session = await getApiSession(request)
+
+  if (!session) {
+    return NextResponse.json(
+      { error: "Authentication required" },
+      { status: 401 }
+    )
+  }
+
+  if (session.user.role !== "admin") {
+    return NextResponse.json(
+      { error: "Admin access required" },
+      { status: 403 }
+    )
+  }
+
+  return session
 }
 
 // Helper function to get session (works in both client and server components)

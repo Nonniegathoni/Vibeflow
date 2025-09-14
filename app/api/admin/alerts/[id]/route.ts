@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { query } from "@/lib/db";
-import { requireAdmin } from "@/lib/auth";
+import { requireApiAdmin } from "@/lib/auth";
 import { insertAuditLog } from "@/lib/audit";
 
 export async function PUT(
@@ -8,7 +8,11 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const admin = await requireAdmin();
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+    const admin = authResult;
     const ipAddress =
       request.headers.get("x-forwarded-for") ||
       request.headers.get("host") ||
@@ -69,7 +73,7 @@ export async function PUT(
         userId: admin.user.id,
         action: "update",
         //@ts-ignore
-        entityId: admin.user.id,
+        entityId: parseInt(params.id),
         details: `Updated fraud alert to status "${status}" with resolution: "${
           resolution || "N/A"
         }"`,

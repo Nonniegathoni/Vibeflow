@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
-import { requireAdmin } from "@/lib/auth"
+import { requireApiAdmin } from "@/lib/auth"
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    await requireAdmin()
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
 
     const result = await query(
       `
@@ -46,7 +49,10 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    await requireAdmin()
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
 
     const { status, assigned_to, resolution_notes } = await request.json()
 

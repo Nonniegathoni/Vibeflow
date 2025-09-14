@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
-import { requireAdmin } from "@/lib/auth"
+import { requireApiAdmin } from "@/lib/auth"
 
 interface Subject {
   subject: string
@@ -30,9 +30,12 @@ interface Report {
   user_email: string | null
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    await requireAdmin()
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
 
     // Get total tickets count
     const totalTickets = await query(

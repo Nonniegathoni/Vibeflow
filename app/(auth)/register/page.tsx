@@ -43,21 +43,16 @@ export default function RegisterPage() {
     setError("")
 
     try {
-      const response = await fetch("/api/admin/users", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: formData.firstName + " " + formData.lastName,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
           email: formData.email,
           password: formData.password,
           phone_number: formData.phone,
-          role: "user", // Default role for new registrations
-          account_number: Math.floor(Math.random() * 1000000000).toString(), // Random account number
-          balance: 0.0, // Default balance
         }),
       });
 

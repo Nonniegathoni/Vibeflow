@@ -12,10 +12,10 @@ from typing import List, Dict, Any, Optional
 # Load environment variables
 load_dotenv()
 
-DB_NAME = "vibeflow"
-DB_USER = "viber"
-DB_PASSWORD = "hfFJ62NFDQrUG01CabZcKregE3L0HG72"
-DB_HOST = "dpg-cvvurnd6ubrc73ak94rg-a.virginia-postgres.render.com"
+DB_NAME = "neondb"
+DB_USER = "neondb_owner"
+DB_PASSWORD = "npg_Lua8NT6GBXKn"
+DB_HOST = "ep-small-meadow-a26r579r-pooler.eu-central-1.aws.neon.tech"
 DB_PORT = "5432"
 # Database connection parameters
 # DB_NAME = os.getenv('DB_NAME')
@@ -161,12 +161,12 @@ from typing import List, Dict, Any, Optional
 
 # Load environment variables
 load_dotenv()
-
-DB_NAME = "vibeflow"
-DB_USER = "viber"
-DB_PASSWORD = "hfFJ62NFDQrUG01CabZcKregE3L0HG72"
-DB_HOST = "dpg-cvvurnd6ubrc73ak94rg-a.virginia-postgres.render.com"
+DB_NAME = "neondb"
+DB_USER = "neondb_owner"
+DB_PASSWORD = "npg_Lua8NT6GBXKn"
+DB_HOST = "ep-small-meadow-a26r579r-pooler.eu-central-1.aws.neon.tech"
 DB_PORT = "5432"
+
 # Database connection parameters
 # DB_NAME = os.getenv('DB_NAME')
 # DB_USER = os.getenv('DB_USER')

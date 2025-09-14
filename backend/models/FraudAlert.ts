@@ -25,8 +25,8 @@ class FraudAlert extends Model<FraudAlertAttributes, FraudAlertCreationAttribute
   public resolution?: string;
 
   // Timestamps
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 }
 
 FraudAlert.init(
@@ -79,6 +79,10 @@ FraudAlert.init(
   {
     sequelize,
     modelName: 'FraudAlert',
+    tableName: 'fraud_alerts',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
     indexes: [
       { fields: ['userId'] },
       { fields: ['status'] },

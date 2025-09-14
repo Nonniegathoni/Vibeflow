@@ -4,23 +4,25 @@ const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:5000/ap
 
 export async function POST(request: NextRequest) {
   try {
-    const { firstName, lastName, email, password } = await request.json();
+    const { name, email, password, phone_number } = await request.json();
     
-    if (!firstName || !email || !password) {
-        return NextResponse.json({ message: 'Missing required fields (firstName, email, password)' }, { status: 400 });
+    if (!name || !email || !password) {
+        return NextResponse.json({ message: 'Missing required fields (name, email, password)' }, { status: 400 });
     }
 
+    const requestBody = {
+      name,
+      email,
+      password,
+      phone_number,
+    };
+    
     const backendResponse = await fetch(`${BACKEND_API_URL}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-      }),
+      body: JSON.stringify(requestBody),
       cache: 'no-store',
     });
 

@@ -1,7 +1,7 @@
 import { Pool } from "pg"
 
 const dbHost = process.env.DB_HOST;
-const useSSL = dbHost?.includes("render.com");
+const useSSL = dbHost?.includes("neon.tech");
 
 const pool = new Pool({
   user: process.env.DB_USER,

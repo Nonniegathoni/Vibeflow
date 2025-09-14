@@ -15,7 +15,7 @@ if (!dbName || !dbUser || !dbPassword || !dbHost) {
     console.error("FATAL ERROR: Database configuration environment variables (DB_NAME, DB_USER, DB_PASSWORD, DB_HOST) are missing!");
     throw new Error("Missing essential database configuration in environment variables.");
 }
-const useSSL = dbHost === null || dbHost === void 0 ? void 0 : dbHost.includes("render.com");
+const useSSL = dbHost === null || dbHost === void 0 ? void 0 : dbHost.includes("neon.tech") 
 const sequelize = new sequelize_1.Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
     port: dbPort,

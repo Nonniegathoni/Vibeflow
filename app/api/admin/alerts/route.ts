@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server"
 import { query } from "@/lib/db"
-import { requireAdmin } from "@/lib/auth"
+import { requireApiAdmin } from "@/lib/auth"
 import { insertAuditLog } from "@/lib/audit"
 
 
 export async function GET(request: Request) {
   try {
-    await requireAdmin()
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
 
     const result = await query(
       `SELECT fa.*, 
@@ -70,7 +73,11 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const admin = await requireAdmin();
+    const authResult = await requireApiAdmin(request);
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+    const admin = authResult;
     const ipAddress =
       request.headers.get("x-forwarded-for") ||
       request.headers.get("host") ||
@@ -115,7 +122,7 @@ export async function PUT(request: Request) {
       userId: admin.user.id,
       action: "update",
       //@ts-ignore
-      entityId: admin.user.id,
+      entityId: id,
       details: `Updated fraud alert status to "${status}"`,
     });
 

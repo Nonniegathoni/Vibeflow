@@ -20,8 +20,8 @@ class Transaction extends Model<TransactionAttributes> implements TransactionAtt
   public description?: string;
   public status!: 'pending' | 'completed' | 'failed';
   public metadata?: Record<string, any>;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly created_at!: Date;
+  public readonly updated_at!: Date;
 }
 
 Transaction.init(
@@ -66,6 +66,8 @@ Transaction.init(
     modelName: 'Transaction',
     tableName: 'transactions',
     timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   }
 );
 

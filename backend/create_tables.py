@@ -3,12 +3,11 @@ import time
 from psycopg2 import OperationalError
 
 # Database connection parameters
-DB_NAME = "vibeflow"
-DB_USER = "viber"
-DB_PASSWORD = "hfFJ62NFDQrUG01CabZcKregE3L0HG72"
-DB_HOST = "dpg-cvvurnd6ubrc73ak94rg-a.virginia-postgres.render.com"
+DB_NAME = "neondb"
+DB_USER = "neondb_owner"
+DB_PASSWORD = "npg_Lua8NT6GBXKn"
+DB_HOST = "ep-small-meadow-a26r579r-pooler.eu-central-1.aws.neon.tech"
 DB_PORT = "5432"
-
 def get_connection(max_retries=3, retry_delay=5):
     for attempt in range(max_retries):
         try:
@@ -42,53 +41,53 @@ def create_tables():
             DO $$
             BEGIN
                 IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
-                              WHERE table_name = 'users' AND column_name = 'verification_code') THEN
-                    ALTER TABLE users ADD COLUMN verification_code VARCHAR(6);
+                              WHERE table_name = 'Users' AND column_name = 'verification_code') THEN
+                    ALTER TABLE "Users" ADD COLUMN verification_code VARCHAR(6);
                 END IF;
                 
                 IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
-                              WHERE table_name = 'users' AND column_name = 'verification_code_expires_at') THEN
-                    ALTER TABLE users ADD COLUMN verification_code_expires_at TIMESTAMP;
+                              WHERE table_name = 'Users' AND column_name = 'verification_code_expires_at') THEN
+                    ALTER TABLE "Users" ADD COLUMN verification_code_expires_at TIMESTAMP;
                 END IF;
             END $$;
         """)
         print("✅ Added verification code columns to users table")
 
-        # Create fraud_rules table
+        # Create "FraudRules" table
         cur.execute("""
-        CREATE TABLE IF NOT EXISTS fraud_rules (
+        CREATE TABLE IF NOT EXISTS "FraudRules" (
             id SERIAL PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
             description TEXT NOT NULL,
             rule_type VARCHAR(50) NOT NULL,
             threshold DECIMAL(15, 2),
             is_active BOOLEAN DEFAULT true,
-            created_by INTEGER REFERENCES users(id),
+            created_by INTEGER REFERENCES "Users"(id),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """)
-        print("✅ Created fraud_rules table")
+        print("✅ Created FraudRules table")
 
-        # Create customer_support table
+        # Create "CustomerSupport" table
         cur.execute("""
-        CREATE TABLE IF NOT EXISTS customer_support (
+        CREATE TABLE IF NOT EXISTS "CustomerSupport" (
             id SERIAL PRIMARY KEY,
-            user_id INTEGER REFERENCES users(id),
+            user_id INTEGER REFERENCES "Users"(id),
             subject VARCHAR(255) NOT NULL,
             message TEXT NOT NULL,
             status VARCHAR(50) NOT NULL DEFAULT 'open',
-            assigned_to INTEGER REFERENCES users(id),
+            assigned_to INTEGER REFERENCES "Users"(id),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """)
-        print("✅ Created customer_support table")
+        print("✅ Created CustomerSupport table")
 
-        # Create notifications table
+        # Create "Notifications" table
         cur.execute("""
-        CREATE TABLE IF NOT EXISTS notifications (
+        CREATE TABLE IF NOT EXISTS "Notifications" (
             id SERIAL PRIMARY KEY,
-            user_id INTEGER REFERENCES users(id),
+            user_id INTEGER REFERENCES "Users"(id),
             title VARCHAR(255) NOT NULL,
             message TEXT NOT NULL,
             type VARCHAR(50) NOT NULL,
@@ -96,13 +95,13 @@ def create_tables():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """)
-        print("✅ Created notifications table")
+        print("✅ Created Notifications table")
 
-        # Create audit_logs table
+        # Create "AuditLogs" table
         cur.execute("""
-        CREATE TABLE IF NOT EXISTS audit_logs (
+        CREATE TABLE IF NOT EXISTS "AuditLogs" (
             id SERIAL PRIMARY KEY,
-            user_id INTEGER REFERENCES users(id),
+            user_id INTEGER REFERENCES "Users"(id),
             action VARCHAR(100) NOT NULL,
             entity_type VARCHAR(50),
             entity_id INTEGER,
@@ -110,7 +109,7 @@ def create_tables():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """)
-        print("✅ Created audit_logs table")
+        print("✅ Created AuditLogs table")
 
         # Commit changes
         conn.commit()
