@@ -3,6 +3,7 @@ import { query } from "@/lib/db"
 import bcrypt from "bcrypt"
 import crypto from "crypto"
 import sessionStore from "@/lib/session-store"
+import { sendVerificationEmail } from "@/lib/email"
 
 export async function POST(request: Request) {
   try {
@@ -51,9 +52,17 @@ export async function POST(request: Request) {
       [verificationCode, expiresAt, user.id]
     )
 
-    // In a real application, send an email with the verification code
-    // For demo purposes, we'll just log it
-    console.log(`Verification code for ${email}: ${verificationCode}`)
+    // Send verification code via email
+    const emailResult = await sendVerificationEmail(email, verificationCode)
+    
+    if (!emailResult.success) {
+      // Log error but don't fail the request - code is still in database
+      console.error("Failed to send verification email:", emailResult.error)
+      // In development, still log the code to console
+      if (!process.env.RESEND_API_KEY) {
+        console.log(`Verification code for ${email}: ${verificationCode}`)
+      }
+    }
 
     return NextResponse.json({
       message: "Verification code sent",
