@@ -129,6 +129,7 @@ async function setupDatabase() {
 
     // Check if admin user exists
     const [adminRows] = await db.query("SELECT * FROM users WHERE email = :email", {
+      replacements: { email: "lucygathonilg05@gmail.com" },
       type: QueryTypes.SELECT,
       //@ts-ignore
       type: db.QueryTypes.SELECT,
@@ -145,7 +146,7 @@ async function setupDatabase() {
         {
           replacements: {
             name: "Admin User",
-            email: "admin@vibeflow.com",
+            email: "lucygathonilg05@gmail.com",
             password: hashedPassword,
             role: "admin",
             balance: 1000000,

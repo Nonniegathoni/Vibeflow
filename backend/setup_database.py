@@ -162,7 +162,7 @@ def create_tables():
         print("✅ Created notifications table")
 
         # Create admin user if it doesn't exist
-        cur.execute("SELECT COUNT(*) FROM users WHERE email = %s", ("admin@vibeflow.com",))
+        cur.execute("SELECT COUNT(*) FROM users WHERE email = %s", ("lucygathonilg05@gmail.com",))
         admin_count = cur.fetchone()[0]
         
         if admin_count == 0:
@@ -174,7 +174,7 @@ def create_tables():
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """, (
                 "Admin User",
-                "admin@vibeflow.com", 
+                "lucygathonilg05@gmail.com", 
                 hashed_password,
                 "admin",
                 1000000.00,

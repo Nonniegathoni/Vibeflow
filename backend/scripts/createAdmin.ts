@@ -10,7 +10,7 @@ import { query } from "../../lib/db";
 const createAdmin = async (): Promise<void> => {
   try {
     console.log("Checking if admin user exists...");
-    const adminEmail = "admin@vibeflow.com";
+    const adminEmail = "lucygathonilg05@gmail.com";
 
     const existingAdmins = await query(
         "SELECT id FROM users WHERE email = $1 LIMIT 1", 
