@@ -1,7 +1,15 @@
 import { Resend } from "resend";
 
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// ✅ Don't initialize at import time
+let resend: Resend | null = null;
+
+// ✅ Initialize only when needed
+function getResendClient() {
+  if (!resend && process.env.RESEND_API_KEY) {
+    resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resend;
+}
 
 export interface EmailOptions {
   to: string;
@@ -24,6 +32,11 @@ export const sendVerificationEmail = async (
         `⚠️  To enable email sending in production, set RESEND_API_KEY in your environment variables`
       );
       return { success: true };
+    }
+
+    const client = getResendClient(); // ✅ Get client here
+    if (!client) {
+      return { success: false, error: "Email client not configured" };
     }
 
     // Get the sender email from environment or use a default
@@ -68,7 +81,7 @@ export const sendVerificationEmail = async (
       </html>
     `;
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await client.emails.send({
       from: fromEmail,
       to: email,
       subject: "Your Admin Verification Code - Vibeflow",
@@ -103,10 +116,15 @@ export const sendEmail = async (
       return { success: true };
     }
 
+    const client = getResendClient(); // ✅ Get client here
+    if (!client) {
+      return { success: false, error: "Email client not configured" };
+    }
+
     const fromEmail =
       process.env.RESEND_FROM_EMAIL || "Vibeflow <onboarding@resend.dev>";
 
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await client.emails.send({
       from: fromEmail,
       to: options.to,
       subject: options.subject,
