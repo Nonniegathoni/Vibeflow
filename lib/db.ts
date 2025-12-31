@@ -84,13 +84,13 @@ export async function query(text: string, params?: any[], useCache = false) {
 }
 
 // Test the connection
-pool.query("SELECT NOW()", (err, res) => {
-  if (err) {
-    console.error("Database connection error:", err)
-  } else {
-    console.log("Connected to PostgreSQL database")
-  }
-})
-
+// Test the connection
+// pool.query("SELECT NOW()", (err, res) => {
+//   if (err) {
+//     console.error("Database connection error:", err)
+//   } else {
+//     console.log("Connected to PostgreSQL database")
+//   }
+// })
 // Export the pool for direct use when needed
 export { pool }
